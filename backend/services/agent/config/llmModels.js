@@ -7,7 +7,7 @@ import { ChatOpenRouter } from "@langchain/openrouter";
 
 const groq = new ChatGroq({
   model: "openai/gpt-oss-120b",
-  apiKey:process.env.GROQ_API_KEY,
+  apiKey: process.env.GROQ_API_KEY,
   temperature: 0,
   maxTokens: undefined,
   maxRetries: 2,
@@ -16,11 +16,11 @@ const groq = new ChatGroq({
 const gemini = new ChatGoogleGenerativeAI({
   model: "gemini-2.5-flash",
 });
-const openrouter=new ChatOpenRouter({
-  model:"deepseek/deepseek-chat",
-  temperature:0,
-  maxTokens:2500
-})
+const openrouter = new ChatOpenRouter({
+  model: "deepseek/deepseek-chat:free",
+  temperature: 0,
+  maxTokens: 2500,
+});
 export const getModel = async (agent) => {
   switch (agent) {
     case "chat":
@@ -29,7 +29,7 @@ export const getModel = async (agent) => {
       return groq;
     case "coding":
       return openrouter;
-      case "imageAnalyzer":
+    case "imageAnalyzer":
       return gemini;
 
     default:
