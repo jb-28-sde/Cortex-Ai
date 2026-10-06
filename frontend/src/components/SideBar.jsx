@@ -56,7 +56,7 @@ function Sidebar() {
         </button>
         <button
           className="flex items-center w-9 h-9 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] hover:scale-105 transition-all duration-200 bg-transparent border-none cursor-pointer"
-          onClick={()=>dispatch(setSelectedConversation(null))}
+          onClick={handleCreateConversation}
         >
           <Plus size={17} />
         </button>
@@ -128,7 +128,7 @@ border-r border-white/10 backdrop-blur-xl shadow-[8px_0_40px_rgba(0,0,0,0.35)] $
           </span>
           <button
             className="flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/[0.05] transition-colors duration-150 bg-transparent border-none cursor-pointer"
-            onClick={()=>dispatch(setSelectedConversation(null))}
+            onClick={handleCreateConversation}
           >
             <PenSquare size={14} />
           </button>
@@ -136,7 +136,7 @@ border-r border-white/10 backdrop-blur-xl shadow-[8px_0_40px_rgba(0,0,0,0.35)] $
         <div className="px-4 pt-4 pb-1">
           <button
             className="w-full flex items-center justify-center gap-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 shadow-lg shadow-indigo-900/40 hover:scale-[1.02] hover:shadow-indigo-700/40 transition-all duration-200 rounded-xl py-[10px] border-none cursor-pointer hover:opacity-90 transition-opacity duration-150"
-            onClick={()=>dispatch(setSelectedConversation(null))}
+            onClick={handleCreateConversation}
           >
             <Plus size={15} />
             New Chat
