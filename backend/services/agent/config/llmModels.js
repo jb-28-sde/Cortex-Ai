@@ -9,7 +9,7 @@ const groq = new ChatGroq({
   model: "openai/gpt-oss-120b",
   apiKey: process.env.GROQ_API_KEY,
   temperature: 0,
-  maxTokens: undefined,
+  maxTokens: 8000,
   maxRetries: 2,
 });
 
