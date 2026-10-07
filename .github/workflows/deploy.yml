@@ -162,6 +162,7 @@ jobs:
           npm run build
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_RAZORPAY_KEY_ID: ${{ secrets.VITE_RAZORPAY_KEY_ID }}
 
       - name: aws configure
         uses: aws-actions/configure-aws-credentials@v6
