@@ -47,6 +47,7 @@ function Sidebar() {
     const data = await createConversation();
     dispatch(addConversation(data));
     dispatch(setSelectedConversation(data));
+     setMobileOpen(false);
   };
   if (collapsed) {
     return (
@@ -70,7 +71,10 @@ function Sidebar() {
             return (
               <div
                 key={conv._id}
-                onClick={() => dispatch(setSelectedConversation(conv))}
+                onClick={() => {dispatch(setSelectedConversation(conv))
+                  setMobileOpen(false);
+                }}
+                
                 className={`flex items-center justify-center cursor-pointer mb-1 p-2 rounded-xl border transition-all duration-200 ${isActive ? "bg-indigo-500/10 border-indigo-500/20 shadow-[0_0_14px_rgba(99,102,241,.18)]" : "border-transparent hover:bg-white/[0.05]"}`}
               >
                 <div
@@ -172,7 +176,9 @@ border-r border-white/10 backdrop-blur-xl shadow-[8px_0_40px_rgba(0,0,0,0.35)] $
               return (
                 <div
                   key={conv._id}
-                  onClick={() => dispatch(setSelectedConversation(conv))}
+                  onClick={() => {dispatch(setSelectedConversation(conv))
+                    setMobileOpen(false)
+                  }}
                   className={`flex items-center gap-2.5 cursor-pointer mb-0.5 px-3 py-2.5 rounded-xl border transition-all duration-200 ${isActive ? "bg-gradient-to-r from-indigo-500/15 to-violet-500/10 border-indigo-400/30 shadow-[0_0_20px_rgba(99,102,241,.12)]" : "bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] rounded-2xl transition-all duration-200 border-transparent"}`}
                 >
                   <div
