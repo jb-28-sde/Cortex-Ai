@@ -6,21 +6,13 @@
 //   credential: cert(serviceAccount)
 // });
 import { cert, initializeApp, getApps } from "firebase-admin";
+import fs from "node:fs";
 
+const serviceAccountPath = "/etc/secrets/serviceAccountKey.json";
 
-
-
-const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
-console.log(
-  "Firebase service account configured:",
-  Boolean(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
+const serviceAccount = JSON.parse(
+fs.readFileSync(serviceAccountPath, "utf8")
 );
-
-if (!key) {
-throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY is missing");
-}
-
-const serviceAccount = JSON.parse(key);
 
 export const app =
 getApps().length === 0
@@ -28,4 +20,5 @@ getApps().length === 0
 credential: cert(serviceAccount),
 })
 : getApps()[0];
+
 
