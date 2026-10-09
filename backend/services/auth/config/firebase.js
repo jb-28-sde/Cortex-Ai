@@ -7,9 +7,13 @@
 // });
 import { cert, initializeApp, getApps } from "firebase-admin";
 
-const serviceAccount = JSON.parse(
-process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-);
+const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+
+if (!key) {
+throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY is missing");
+}
+
+const serviceAccount = JSON.parse(key);
 
 export const app =
 getApps().length === 0
