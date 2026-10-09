@@ -7,7 +7,14 @@
 // });
 import { cert, initializeApp, getApps } from "firebase-admin";
 
+
+
+
 const key = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+console.log(
+  "Firebase service account configured:",
+  Boolean(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
+);
 
 if (!key) {
 throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY is missing");
