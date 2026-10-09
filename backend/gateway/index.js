@@ -9,7 +9,7 @@ import { getCurrentUser } from "./controllers/user.controller.js";
 import { proxyWithHeader } from "./utils/proxyWithHeaders.js";
 import morgan from "morgan";
 
-const port = process.env.PORT;
+const port = process.env.PORT || 10000;
 
 const app = express();
 app.use(
@@ -31,6 +31,9 @@ app.get("/", (req, res) => {
   res.json({ message: "hello from gateway V5" });
 });
 
-app.listen(port, () => {
+// app.listen(port, () => {
+//   console.log(`gateway started at ${port}`);
+// });
+app.listen(port, "0.0.0.0", () => {
   console.log(`gateway started at ${port}`);
 });
