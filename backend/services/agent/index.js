@@ -9,6 +9,7 @@ const port = process.env.PORT;
 
 const app = express();
 app.use(express.json())
+app.use('/uploads', express.static('uploads'));
 app.use("/",router)
 app.use((err,req,res,next)=>{
   console.log(err)
