@@ -2,7 +2,7 @@ import { checkAgentLimit } from "../config/agentLimit.js";
 import { getModel } from "../config/llmModels.js";
 import { deductCredits } from "../utils/deductCredits.js";
 import { generatePpt } from "../utils/generatePpt.js";
-import { getFromS3 } from "../utils/getFromS3.js";
+// import { getFromS3 } from "../utils/getFromS3.js";
 import { uploadToS3 } from "../utils/uploadToS3.js";
 export const pptAgent = async (state) => {
   try {
@@ -44,11 +44,12 @@ export const pptAgent = async (state) => {
       outputType: "nodebuffer",
     });
     const filename = `ppt-${Date.now()}.pptx`;
-    await uploadToS3(
-      filename,
-      buffer,
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation");
-      const downloadUrl=await getFromS3(filename,24*60*60)
+    // await uploadToS3(
+    //   filename,
+    //   buffer,
+    //   "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+      // const downloadUrl=await getFromS3(filename,24*60*60)
+      const downloadUrl = await uploadToS3(filename, buffer, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
 
       return{
         ...state,
@@ -62,7 +63,8 @@ export const pptAgent = async (state) => {
     console.log(error)
         return{
       ...state,
-      aiResponse:error?.data?.message || "failed to generate ppt"
+      // aiResponse:error?.data?.message || "failed to generate ppt"
+      aiResponse:`Presentation Generated\n${data.title}\n[Download PPT](${downloadUrl})`
     }
     
    

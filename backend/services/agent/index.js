@@ -17,7 +17,7 @@ app.use((err,req,res,next)=>{
   if(err.status){
     return res.status(err.status).json(err.data)
   }
-  return res.status(500).json({message:`agent error ${error}`})
+  return res.status(500).json({message:`agent error ${err}`})
 })
 
 app.get("/", (req, res) => {
