@@ -1,4 +1,4 @@
-// import fs from "fs";
+import fs from "fs";
 import path from "path";
 
 export const uploadToS3 = async (filename, buffer, contentType) => {
