@@ -1,7 +1,7 @@
 import { getModel } from "../config/llmModels.js";
 import axios from "axios";
 import { uploadToS3 } from "../utils/uploadToS3.js";
-import { getFromS3 } from "../utils/getFromS3.js";
+//import { getFromS3 } from "../utils/getFromS3.js";
 import { deductCredits } from "../utils/deductCredits.js";
 import { checkAgentLimit } from "../config/agentLimit.js";
 export const visionAgent = async (state) => {
@@ -33,8 +33,9 @@ export const visionAgent = async (state) => {
     const buffer = Buffer.from(imageRes.data);
     const filename = `image-${Date.now()}.png`;
 
-    await uploadToS3(filename, buffer, "image/png");
-    const downloadUrl = await getFromS3(filename, 24 * 60);
+    // await uploadToS3(filename, buffer, "image/png");
+    //const downloadUrl = await getFromS3(filename, 24 * 60);
+    const downloadUrl = await uploadToS3(filename, buffer, "image/png");
 
     return {
       ...state,
@@ -47,7 +48,8 @@ export const visionAgent = async (state) => {
     console.log(error)
         return{
       ...state,
-      aiResponse:error?.data?.message || "failed to generate image"
+      // aiResponse:error?.data?.message || "failed to generate image"
+      aiResponse: `![Generated Image](${downloadUrl})\n\n[Download Image](${downloadUrl})`
     }
     
   }
