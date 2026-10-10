@@ -2,7 +2,7 @@ import { checkAgentLimit } from "../config/agentLimit.js"
 import { getModel } from "../config/llmModels.js"
 import { deductCredits } from "../utils/deductCredits.js"
 import { generatePdf } from "../utils/generatePdf.js"
-import { getFromS3 } from "../utils/getFromS3.js"
+// import { getFromS3 } from "../utils/getFromS3.js"
 import { uploadToS3 } from "../utils/uploadToS3.js"
 
 export const pdfAgent = async (state) => {
@@ -35,9 +35,10 @@ export const pdfAgent = async (state) => {
      await deductCredits(state.userId,"pdf")
      const pdfBuffer=await generatePdf(data)
     const filename=`pdf-${Date.now()}.pdf`
-     await uploadToS3(filename,pdfBuffer,"application/pdf")
+    //  await uploadToS3(filename,pdfBuffer,"application/pdf")
 
-     const downloadUrl=await getFromS3(filename,24*60)
+    //  const downloadUrl=await getFromS3(filename,24*60)
+    const downloadUrl = await uploadToS3(filename, pdfBuffer, "application/pdf");
      return{
       ...state,
       aiResponse:`PDF Generated
@@ -50,7 +51,8 @@ export const pdfAgent = async (state) => {
    console.log(error)
         return{
       ...state,
-      aiResponse:error?.data?.message || "failed to generate pdf"
+      //aiResponse:error?.data?.message || "failed to generate pdf"
+      aiResponse: `PDF Generated! \n${data.title} \n[Download PDF](${downloadUrl})`
     }
   }
   
