@@ -35,7 +35,7 @@ export const visionAgent = async (state) => {
 
     // await uploadToS3(filename, buffer, "image/png");
     //const downloadUrl = await getFromS3(filename, 24 * 60);
-    const downloadUrl = await uploadToS3(filename, buffer, "image/png");
+   const downloadUrl = await uploadToS3(filename, buffer, "image/png");
 
     return {
       ...state,
