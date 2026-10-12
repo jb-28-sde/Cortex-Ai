@@ -32,17 +32,37 @@ function ChatArea() {
 //     cancelled = true;
 //   };
 // }, [selectedConversation?._id]);
+  // useEffect(()=>{
+  // const getMessage = async ()=>{
+  //   if(selectedConversation){
+  //     if(selectedConversation.title=="New Chat")return;
+  //     const data = await getMessages(selectedConversation?._id)
+  //     console.log(data)
+  //     dispatch(setMessages(data))
+  //     const latestArtifactMessage=[...data].reverse().find(msg=>msg.artifacts && msg.artifacts.length>0)
+  //     dispatch(setArtifacts(latestArtifactMessage?.artifacts || []))
+  //   }
+    
+  // }
+  // getMessage()
+  // },[selectedConversation?._id])
   useEffect(()=>{
   const getMessage = async ()=>{
     if(selectedConversation){
+      dispatch(setMessages([]));
+      dispatch(setArtifacts([]));
+
       if(selectedConversation.title=="New Chat")return;
+      
       const data = await getMessages(selectedConversation?._id)
       console.log(data)
-      dispatch(setMessages(data))
-      const latestArtifactMessage=[...data].reverse().find(msg=>msg.artifacts && msg.artifacts.length>0)
-      dispatch(setArtifacts(latestArtifactMessage?.artifacts || []))
+      
+      if (Array.isArray(data)) {
+        dispatch(setMessages(data))
+        const latestArtifactMessage=[...data].reverse().find(msg=>msg.artifacts && msg.artifacts.length>0)
+        dispatch(setArtifacts(latestArtifactMessage?.artifacts || []))
+      }
     }
-    
   }
   getMessage()
   },[selectedConversation?._id])
