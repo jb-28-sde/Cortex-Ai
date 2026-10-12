@@ -10,12 +10,29 @@ export const searchAgent = async (state) => {
    })
    await deductCredits(state.userId,"search")
    console.log(results)
-   return{
-    ...state,
-     searchResults:results,
-      images:results.images 
-     }
- } catch (error) {
+   
+    let safeResults = results;
+    if (Array.isArray(results)) {
+        safeResults = results.slice(0, 3).map(item => ({
+            ...item,
+            content: item.content ? item.content.substring(0, 800) + "..." : ""
+        }));
+    } else if (typeof results === "string") {
+        safeResults = results.substring(0, 3000) + "...";
+    }
+    
+    return {
+      ...state,
+      searchResults: safeResults, 
+      images: results.images || [] }
+
+   // return{
+   //  ...state,
+   //   searchResults:results,
+   //    images:results.images 
+   //   }
+    }
+  catch (error) {
     console.log(error)
         return{
       ...state,
