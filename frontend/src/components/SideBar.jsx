@@ -44,11 +44,23 @@ function Sidebar() {
     getConv();
   }, [userData?._id]);
 
+  // const handleCreateConversation = async () => {
+  //   const data = await createConversation();
+  //   dispatch(addConversation(data));
+  //   dispatch(setSelectedConversation(data));
+  //    setMobileOpen(false);
+
   const handleCreateConversation = async () => {
-    const data = await createConversation();
-    dispatch(addConversation(data));
-    dispatch(setSelectedConversation(data));
-     setMobileOpen(false);
+    setMobileOpen(false);
+    dispatch(setSelectedConversation(null));
+
+    try {
+      const data = await createConversation();
+      dispatch(addConversation(data));
+      dispatch(setSelectedConversation(data));
+    } catch (error) {
+      console.log("Error creating new chat:", error);
+    }
   };
   if (collapsed) {
     return (
