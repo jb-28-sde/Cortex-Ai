@@ -93,48 +93,116 @@ const toggle = () => {
 
 
 
-  const handleSendMessage = async () => {
-    dispatch(setIsLoading(true))
-    let conversation = selectedConversation;
-    if (!conversation) {
-      const conv = await createConversation();
-      dispatch(setSelectedConversation(conv));
-      dispatch(addConversation(conv));
-      conversation = conv;
-    }
+  // const handleSendMessage = async () => {
+  //   dispatch(setIsLoading(true))
+  //   let conversation = selectedConversation;
+  //   if (!conversation) {
+  //     const conv = await createConversation();
+  //     dispatch(setSelectedConversation(conv));
+  //     dispatch(addConversation(conv));
+  //     conversation = conv;
+  //   }
 
-    if (conversation.title == "New Chat") {
-      await updateConversation({ id: conversation?._id, title: value.trim() });
+  //   if (conversation.title == "New Chat") {
+  //     await updateConversation({ id: conversation?._id, title: value.trim() });
+  //     dispatch(
+  //       setConvTitle({
+  //         conversationId: conversation._id,
+  //         title: value.slice(0, 40),
+  //       }),
+  //     );
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append("prompt", value.trim());
+  //   formData.append("conversationId", conversation?._id);
+  //   formData.append("agent", selectedAgent.toLowerCase());
+  //   if(selectedFile){
+  //   formData.append("file", selectedFile);}
+
+  //   dispatch(addMessage({ role: "user", content: value.trim() }));
+  //   setValue("");
+  //   const data = await sendMessage(formData);
+  //   dispatch(setIsLoading(false))
+  //   setSelectedFile(null)
+  //   dispatch(setArtifacts(data?.artifacts || []));
+  //   dispatch(
+  //     addMessage({
+  //       role: "assistant",
+  //       content: data?.answer,
+  //       images: data?.images,
+  //     }),
+  //   );
+  //   console.log(data);
+  // };
+
+const handleSendMessage = async () => {
+    if (!value.trim() && !selectedFile) return;
+
+    dispatch(setIsLoading(true));
+    
+    try {
+      let conversation = selectedConversation;
+      
+      if (!conversation) {
+        const conv = await createConversation();
+        if (conv) {
+          dispatch(setSelectedConversation(conv));
+          dispatch(addConversation(conv));
+          conversation = conv;
+        }
+      }
+
+      if (conversation?.title === "New Chat" || !conversation?.title) {
+        await updateConversation({ id: conversation?._id, title: value.trim() });
+        dispatch(
+          setConvTitle({
+            conversationId: conversation?._id,
+            title: value.slice(0, 40),
+          }),
+        );
+      }
+
+      const formData = new FormData();
+      formData.append("prompt", value.trim());
+      if (conversation?._id) formData.append("conversationId", conversation._id);
+      formData.append("agent", selectedAgent.toLowerCase());
+      if (selectedFile) {
+        formData.append("file", selectedFile);
+      }
+
+      dispatch(addMessage({ role: "user", content: value.trim() }));
+      setValue("");
+      setSelectedFile(null); 
+
+      const data = await sendMessage(formData);
+      
+      dispatch(setArtifacts(data?.artifacts || []));
+      
       dispatch(
-        setConvTitle({
-          conversationId: conversation._id,
-          title: value.slice(0, 40),
+        addMessage({
+          role: "assistant",
+          content: data?.answer || "Sorry, network lag or no response from server.",
+          images: data?.images || [],
         }),
       );
+      
+    } catch (error) {
+      console.log("Send message crash avoided:", error);
+      dispatch(
+        addMessage({
+          role: "assistant",
+          content: "Something went wrong. Please check your connection and try again.",
+          images: [],
+        })
+      );
+    } finally {
+      dispatch(setIsLoading(false));
     }
-
-    const formData = new FormData();
-    formData.append("prompt", value.trim());
-    formData.append("conversationId", conversation?._id);
-    formData.append("agent", selectedAgent.toLowerCase());
-    if(selectedFile){
-    formData.append("file", selectedFile);}
-
-    dispatch(addMessage({ role: "user", content: value.trim() }));
-    setValue("");
-    const data = await sendMessage(formData);
-    dispatch(setIsLoading(false))
-    setSelectedFile(null)
-    dispatch(setArtifacts(data?.artifacts || []));
-    dispatch(
-      addMessage({
-        role: "assistant",
-        content: data?.answer,
-        images: data?.images,
-      }),
-    );
-    console.log(data);
   };
+
+
+
   const agents = [
     { id: "auto", icon: Zap, label: "Auto" },
     { id: "chat", icon: MessageSquare, label: "Chat" },
