@@ -11,14 +11,28 @@ export const searchAgent = async (state) => {
    await deductCredits(state.userId,"search")
    console.log(results)
    
-    let safeResults = results;
-    if (Array.isArray(results)) {
-        safeResults = results.slice(0, 3).map(item => ({
-            ...item,
-            content: item.content ? item.content.substring(0, 800) + "..." : ""
-        }));
-    } else if (typeof results === "string") {
-        safeResults = results.substring(0, 3000) + "...";
+  let safeResults = results;
+    
+    try {
+        if (results && Array.isArray(results.results)) {
+            safeResults = results.results.slice(0, 3).map(item => ({
+                title: item.title,
+                content: item.content ? String(item.content).substring(0, 800) + "..." : ""
+            }));
+        } 
+        else if (Array.isArray(results)) {
+            safeResults = results.slice(0, 3).map(item => ({
+                ...item,
+                content: item.content ? String(item.content).substring(0, 800) + "..." : ""
+            }));
+        } 
+        else {
+            let textData = typeof results === "string" ? results : JSON.stringify(results);
+            safeResults = textData.substring(0, 2500) + "...";
+        }
+    } catch (err) {
+        console.log("Trimming error:", err);
+        safeResults = "Details found but text was too large to process.";
     }
     
     return {
